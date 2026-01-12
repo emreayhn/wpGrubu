@@ -1,13 +1,25 @@
 <!DOCTYPE html>
 <html lang="tr">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Tek Tuşla WP Grubu Açma Simülasyonu - Hızlı ve Kolay" />
     <title>Tek Tuşla WP Grubu</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📱</text></svg>">
+    
+    <!-- React & ReactDOM (Production) -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel (for JSX) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
     <style>
       body {
         font-family: 'Inter', sans-serif;
@@ -29,20 +41,133 @@
         100% { background-position: 0% 50%; }
       }
     </style>
-  <script type="importmap">
+<script type="importmap">
 {
   "imports": {
-    "react": "https://esm.sh/react@^19.2.3",
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
     "vite": "https://esm.sh/vite@^7.3.1",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react/": "https://esm.sh/react@^19.2.3/"
   }
 }
 </script>
 </head>
-  <body class="bg-gray-900 text-white overflow-hidden selection:bg-green-500 selection:text-white">
+<body class="bg-gray-900 text-white overflow-hidden selection:bg-green-500 selection:text-white">
     <div id="root"></div>
-    <script type="module" src="./index.tsx"></script>
-  </body>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        // --- COMPONENTS ---
+
+        const ButtonScreen = ({ onActivate }) => {
+            return (
+                <div className="flex flex-col items-center justify-center space-y-10 animate-fade-in text-center py-8">
+                    <div className="space-y-3">
+                        <h1 className="text-4xl font-extrabold text-white tracking-tight drop-shadow-xl">Hızlı Grup Kur</h1>
+                        <p className="text-slate-400 font-medium text-lg">Tek tıkla işlemleri başlatın.</p>
+                    </div>
+
+                    <button
+                        onClick={onActivate}
+                        className="group relative flex items-center justify-center w-72 h-72 rounded-full bg-gradient-to-b from-green-500 to-green-700 shadow-[0_0_60px_rgba(34,197,94,0.4)] transition-all duration-300 hover:scale-105 hover:shadow-[0_0_90px_rgba(34,197,94,0.6)] active:scale-95 active:shadow-[0_0_30px_rgba(34,197,94,0.3)] cursor-pointer"
+                        aria-label="WP Grubu Aç"
+                    >
+                        <div className="absolute inset-0 rounded-full border-4 border-green-400/30 animate-[pulse_2s_infinite]"></div>
+                        <div className="absolute inset-2 rounded-full border border-white/10"></div>
+                        
+                        <div className="flex flex-col items-center space-y-4 z-10 transform transition-transform group-hover:-translate-y-1">
+                            <svg 
+                                viewBox="0 0 24 24" 
+                                fill="currentColor" 
+                                className="w-24 h-24 text-white drop-shadow-[0_4px_6px_rgba(0,0,0,0.3)]"
+                            >
+                                <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/>
+                            </svg>
+                            <span className="text-2xl font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                                BAŞLAT
+                            </span>
+                        </div>
+                    </button>
+                    
+                    <div className="flex items-center gap-2 text-xs text-slate-500 font-mono bg-slate-900/50 px-3 py-1 rounded-full border border-slate-800">
+                        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                        Sistem Çevrimiçi
+                    </div>
+                </div>
+            );
+        };
+
+        const ResultScreen = ({ onReset }) => {
+            return (
+                <div className="relative bg-slate-800/80 backdrop-blur-2xl border border-slate-700 p-8 rounded-3xl shadow-[0_0_60px_-15px_rgba(239,68,68,0.3)] text-center animate-fade-in overflow-hidden">
+                    {/* Alert Icon */}
+                    <div className="flex justify-center mb-6">
+                        <div className="p-4 bg-red-500/20 rounded-full animate-bounce">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-red-500 drop-shadow-[0_0_10px_rgba(239,68,68,0.5)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <h2 className="text-7xl font-black text-transparent bg-clip-text bg-gradient-to-br from-red-400 via-red-500 to-orange-500 mb-2 tracking-tighter drop-shadow-sm scale-110 transform">
+                        100K
+                    </h2>
+                    
+                    <h3 className="text-3xl font-bold text-white mb-8 uppercase tracking-[0.2em] border-b border-white/10 pb-4 mx-8">
+                        HAZIRLA
+                    </h3>
+
+                    <div className="bg-slate-900/60 rounded-xl p-6 border border-slate-700/50 mb-8 shadow-inner">
+                        <p className="text-slate-300 text-sm font-medium">
+                            Grup açılış ücreti hesaplandı.<br/>
+                            <span className="text-green-400 font-bold">Ödemeyi hazırlayınız.</span>
+                        </p>
+                    </div>
+
+                    <button 
+                        onClick={onReset}
+                        className="text-slate-500 hover:text-white text-xs transition-colors duration-200 uppercase tracking-widest hover:underline decoration-slate-700 hover:decoration-white offset-4"
+                    >
+                        İptal Et / Geri Dön
+                    </button>
+                </div>
+            );
+        };
+
+        const App = () => {
+            const [showResult, setShowResult] = useState(false);
+
+            const handleButtonClick = () => {
+                setShowResult(true);
+            };
+
+            const handleReset = () => {
+                setShowResult(false);
+            };
+
+            return (
+                <main className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-black p-4 relative overflow-hidden animate-gradient">
+                    {/* Decorative background elements */}
+                    <div className="absolute top-0 left-0 w-96 h-96 bg-green-500/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+                    <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2 pointer-events-none" />
+
+                    <div className="relative z-10 w-full max-w-md">
+                        {!showResult ? (
+                            <ButtonScreen onActivate={handleButtonClick} />
+                        ) : (
+                            <ResultScreen onReset={handleReset} />
+                        )}
+                    </div>
+                </main>
+            );
+        };
+
+        // --- INITIALIZATION ---
+        const rootElement = document.getElementById('root');
+        const root = ReactDOM.createRoot(rootElement);
+        root.render(<App />);
+    </script>
+</body>
 </html>
