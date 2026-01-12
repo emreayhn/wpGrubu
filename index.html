@@ -3,7 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Tek Tuşla WP Grubu Açma Simülasyonu - Hızlı ve Kolay" />
     <title>Tek Tuşla WP Grubu</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📱</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
@@ -17,6 +19,15 @@
         from { opacity: 0; transform: scale(0.95); }
         to { opacity: 1; transform: scale(1); }
       }
+      .animate-gradient {
+        background-size: 200% 200%;
+        animation: gradient 5s ease infinite;
+      }
+      @keyframes gradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
     </style>
   <script type="importmap">
 {
@@ -28,7 +39,8 @@
 }
 </script>
 </head>
-  <body class="bg-gray-900 text-white overflow-hidden">
+  <body class="bg-gray-900 text-white overflow-hidden selection:bg-green-500 selection:text-white">
     <div id="root"></div>
+    <script type="module" src="./index.tsx"></script>
   </body>
 </html>
